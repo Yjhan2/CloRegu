@@ -13,7 +13,6 @@ const isRegister = ref(false)
 const username = ref('')
 const password = ref('')
 const email = ref('') // 注册表单需要的额外字段
-const phone = ref('') // 示例电话字段
 
 // 登录方法
 const login = async () => {

@@ -6,51 +6,51 @@ import AdvancedSettings from '@/components/utils/AdvancedSettings.vue' // 导入
 import MainContent from '@/components/views/MainContent.vue' // 导入MainContent组件
 
 // 定义表单数据
-const form = ref({
-  uploadUrl: '',
-  storagePath: '',
-  clothingType: '',
-  advancedSettings: false
-})
+// const form = ref({
+//   uploadUrl: '',
+//   storagePath: '',
+//   clothingType: '',
+//   advancedSettings: false
+// })
 
-const isGenerating = ref(false)
+// const isGenerating = ref(false)
 const showAdvancedSettings = ref(false) // 添加状态来控制显示哪个组件
 const router = useRouter()
 const showUserMenu = ref(false)
 
-const startGeneration = () => {
-  isGenerating.value = true
-  // 在这里添加生成逻辑
-}
+// const startGeneration = () => {
+//   isGenerating.value = true
+//   // 在这里添加生成逻辑
+// }
 
-const stopGeneration = () => {
-  isGenerating.value = false
-  // 在这里添加停止逻辑
-}
+// const stopGeneration = () => {
+//   isGenerating.value = false
+//   // 在这里添加停止逻辑
+// }
 
-const handleUploadSuccess = (event) => {
-  const files = event.target.files
-  if (files.length > 0) {
-    form.value.uploadUrl = files[0].webkitRelativePath.split('/')[0]
-  }
-}
+// const handleUploadSuccess = (event) => {
+//   const files = event.target.files
+//   if (files.length > 0) {
+//     form.value.uploadUrl = files[0].webkitRelativePath.split('/')[0]
+//   }
+// }
 
-const handleStorageSuccess = (event) => {
-  const files = event.target.files
-  if (files.length > 0) {
-    form.value.storagePath = files[0].webkitRelativePath.split('/')[0]
-  }
-}
+// const handleStorageSuccess = (event) => {
+//   const files = event.target.files
+//   if (files.length > 0) {
+//     form.value.storagePath = files[0].webkitRelativePath.split('/')[0]
+//   }
+// }
 
-const handleClick = (refName) => {
-  const inputRef = refName === 'uploadInput' ? uploadInput.value : storageInput.value
-  if (inputRef) {
-    inputRef.click()
-  }
-}
+// const handleClick = (refName) => {
+//   const inputRef = refName === 'uploadInput' ? uploadInput.value : storageInput.value
+//   if (inputRef) {
+//     inputRef.click()
+//   }
+// }
 
-const uploadInput = ref(null)
-const storageInput = ref(null)
+// const uploadInput = ref(null)
+// const storageInput = ref(null)
 const userAvatar = ref(require('@/assets/logo2.png'))
 
 const toggleUserMenu = () => {
@@ -90,7 +90,7 @@ const toggleAdvancedSettings = () => {
       </div>
     </div>
     <div v-if="showUserMenu" class="user-menu">
-      <p>用户信息</p>
+      <p>数据库</p>
       <p @click="logout">登出</p>
     </div>
   </div>

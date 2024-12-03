@@ -6,8 +6,8 @@ import 'element-plus/dist/index.css'
 import { createWebHistory, createRouter } from 'vue-router'
 import './assets/styles/fonts.css'; // 引入字体样式
 
-import LoginViews from './components/views/Login.vue'
-import HomeView from './components/views/Home.vue'
+import LoginViews from './components/views/LoginPage.vue'
+import HomeView from './components/views/HomePage.vue'
 
 const routes = [
     { path: '/', name: 'Login', component: LoginViews },

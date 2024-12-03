@@ -1,7 +1,7 @@
 <template>
   <el-container class="settings-container">
     <el-header class="settings-header">
-      <el-icon :size="32"><Setting /></el-icon>
+      <el-icon :size="28"><Setting /></el-icon>
       <h2 class="settings-title">控制台</h2>
   </el-header>
     <el-main class="settings-main">
@@ -13,7 +13,7 @@
           <input type="file" webkitdirectory @change="handleUploadSuccess" style="display: none;" ref="uploadInput"/>
           <el-input v-model="form.uploadUrl" readonly @click="handleClick('uploadInput')"  class="input-box">
           <template #prefix>
-              <el-icon style="font-size: 24px;">
+              <el-icon style="font-size: 28px;">
                 <UploadFilled />
               </el-icon>
             </template>
@@ -29,7 +29,7 @@
           <el-row :span="28" justify="start">
              服装选择
           </el-row>
-          <el-select v-model="form.clothingType" placeholder="请选择服装类型" class="clothing-select">
+          <el-select v-model="form.clothingType" placeholder="请选择服装类型" size="large" class="clothing-select">
             <el-option
               v-for="item in clothingOptions"
               :key="item.value"
@@ -143,10 +143,10 @@ const startGeneration = () => {
   mainContent.dispatchEvent(new CustomEvent('start-progress'))
 }
 
-const stopGeneration = () => {
-  isGenerating.value = false
-  // 在这里添加停止逻辑
-}
+// const stopGeneration = () => {
+//   isGenerating.value = false
+//   // 在这里添加停止逻辑
+// }
 
 const handleUploadSuccess = (event) => {
   const files = event.target.files
@@ -155,12 +155,12 @@ const handleUploadSuccess = (event) => {
   }
 }
 
-const handleStorageSuccess = (event) => {
-  const files = event.target.files
-  if (files.length > 0) {
-    form.value.storagePath = files[0].webkitRelativePath.split('/')[0]
-  }
-}
+// const handleStorageSuccess = (event) => {
+//   const files = event.target.files
+//   if (files.length > 0) {
+//     form.value.storagePath = files[0].webkitRelativePath.split('/')[0]
+//   }
+// }
 
 const handleClick = (refName) => {
   const inputRef = refName === 'uploadInput' ? uploadInput.value : storageInput.value
@@ -176,7 +176,7 @@ const showAdvancedSettings1 = ref(false)
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap'); */
 .settings-container {
     width: 100%; /* 设置左侧设置页面的宽度 */
     height: 100%; /* 设置高度与视口高度匹配 */
@@ -192,7 +192,7 @@ const showAdvancedSettings1 = ref(false)
 
 .input-box {
   width: 100%;
-  height: 40px;
+  height: 42px;
 }
 
 .settings-header {
@@ -200,7 +200,7 @@ const showAdvancedSettings1 = ref(false)
     justify-content: center; /* 水平居中 */
     align-items: center; /* 垂直居中 */
     width: 100%;
-    height: 33%;
+    height: 20%;
     padding: 10px;
 }
 
@@ -210,12 +210,12 @@ const showAdvancedSettings1 = ref(false)
 }
 
 .settings-title {
-  font-size: 250%; /* 设置标题字体大小 */
+  font-size: 200%; /* 设置标题字体大小 */
 }
 
 .custom-input {
   width: 100%;
-  height: 70px;
+  height: 75px;
   border-radius: 16px !important; 
 }
 
@@ -234,16 +234,20 @@ const showAdvancedSettings1 = ref(false)
   border: none !important; /* 移除按钮边框 */
 }
 
-.clothing-select .el-input__inner {
-  height: 70px; /* 增加服装选择输入框高度 */
-  line-height: 70px; /* 调整行高以垂直居中文本 */
+.clothing-select {
+  width: 100%;
+  height: 100%;
+  .el-input__inner {
+    height: 100%;
+  }
 }
+
 
 .settings-advance {
     width: 80%;
-    height: 33%;
+    height: 40%;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-direction: column; /* 垂直排列 */
     align-items: flex-start;
     cursor: pointer;
@@ -252,18 +256,18 @@ const showAdvancedSettings1 = ref(false)
 .option1 {
     top: 0; /* 距离顶部0 */
     width: 100%;
-    height: 13%;
+    height: 15%;
     align-items: center;
     border-top: 1px solid #0c0c0c; /* 添加顶部边框 */
     border-bottom: 1px solid #0c0c0c; /* 添加底部边框 */
     cursor: pointer;
     font-size: 120%;
     transition: height 0.5s ease; /* 添加高度过渡效果 */
-    position: relative;
+    /* position: relative; */
 }
 
 .option1.slide {
-    height: 100%;
+    height: 80%;
 }
 
 .invisible-button {
@@ -289,9 +293,9 @@ const showAdvancedSettings1 = ref(false)
 }
 
 .advanced-settings-text {
-  position: absolute; /* 绝对定位 */
-  top: 10px; /* 根据需要调整 */
+  position: absolute; 
   left: 10px; /* 根据需要调整 */
+  top: 8px; /* 根据需要调整 */
   display: flex;
   align-items: center; /* 垂直居中 */
   justify-content: space-between; /* 水平分布 */
