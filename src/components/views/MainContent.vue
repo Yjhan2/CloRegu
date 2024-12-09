@@ -17,7 +17,7 @@
       <el-icon size="32"><ArrowRightBold /></el-icon>
       <div class="display-box right-display-box">
         <img v-if="rightImage" :src="rightImage"/>
-      </div>
+      </div>  
     </div>
     <div class="gallery right-gallery" ref="rightGallery">
       <div class="gallery-wrapper">
@@ -135,7 +135,7 @@ onMounted(() => {
 
   rightScroll.on('scroll', (pos) => {
     console.log('Right scroll position:', pos);
-    if (leftScroll) {
+    if (leftScroll) { 
       leftScroll.scrollTo(pos.x, pos.y)
     }
   })

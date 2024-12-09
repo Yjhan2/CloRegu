@@ -14,31 +14,39 @@ const username = ref('')
 const password = ref('')
 const email = ref('') // 注册表单需要的额外字段
 
+
 // 登录方法
-const login = async () => {
+const login = async (isRegister) => {
+  console.log('isRegister:', isRegister) // 打印 isRegister 的值
   try {
     const params = {
-      account: username.value,
-      password: password.value
+      username: username.value,
+      password: password.value,
+      ...(isRegister
+       && { email: email.value }) // 如果是注册，添加 email 字段
     }
 
-    const response = await axios.post('http://localhost:8888/user/login', params, {
+    console.log('params:', params) // 打印 params 的值
+
+    const url = isRegister ? 'http://localhost:8888/user/register' : 'http://localhost:8888/user/login'
+    const response = await axios.post(url, params, {
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    if (response.data === '登录成功') {
+
+    if (response.data.success) {
       // 显示成功消息
       ElMessage({
-        message: '登录成功',
+        message: isRegister ? '注册成功' : '登录成功',
         type: 'success',
       })
-      // 登录成功后跳转到首页
+      // 登录或注册成功后跳转到首页
       router.push({ name: 'Home' })
     } else {
       // 显示失败消息
       ElMessage({
-        message: '登录失败，用户名不存在或者密码错误',
+        message: isRegister ? '注册失败，邮箱或用户名已存在' : '登录失败，用户名不存在或者密码错误',
         type: 'error',
       })
     }
@@ -46,7 +54,7 @@ const login = async () => {
     console.error(error)
     // 显示错误消息
     ElMessage({
-      message: '登录失败，请稍后再试',
+      message: isRegister ? '注册失败，请稍后再试' : '登录失败，请稍后再试',
       type: 'error',
     })
   }
@@ -74,7 +82,7 @@ const login = async () => {
                     <el-link class="right" type="primary" :underline="false">忘记密码？</el-link>
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="button" type="primary" auto-insert-space @click="login">{{ isRegister ? '注册' : '登录' }}</el-button>
+                    <el-button class="button" type="primary" auto-insert-space @click="login(isRegister)">{{ isRegister ? '注册' : '登录' }}</el-button>
                 </el-form-item>
                 <el-form-item class="flex">
                     <el-link type="info" :underline="false" @click="isRegister = !isRegister">
