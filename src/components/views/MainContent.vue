@@ -1,8 +1,5 @@
 <template>
   <div class="main-content">
-    <div class="progress-bar" v-if="showProgressBar">
-      <el-progress :percentage="progress"></el-progress>
-    </div>
     <div class="gallery left-gallery" ref="leftGallery">
       <div class="gallery-wrapper">
         <div class="gallery-item" v-for="(item, index) in galleryLeftItems" :key="'left-' + index" @click="showImage('left', item.src, index)">
@@ -10,13 +7,21 @@
         </div>
       </div>
     </div>
-    <div class="main-area">
+    <div class="middle">
+      <div class="progress-left">
+        <el-progress :percentage="leftProgress" style="width:50%" :stroke-width="15" striped color="#F56C6C" :format="formatLeftProgress"/>
+      </div>
+      <div class="main-area">
       <div class="display-box left-display-box">
         <img v-if="leftImage" :src="leftImage"/>
       </div>
       <el-icon size="32"><ArrowRightBold /></el-icon>
       <div class="display-box right-display-box">
         <img v-if="rightImage" :src="rightImage"/>
+      </div>
+      </div>
+      <div class="progress-right">
+        <el-progress :percentage="RightProgress" style="width:50%" :stroke-width="15" striped :format="formatRightProgress"/>
       </div>
     </div>
     <div class="gallery right-gallery" ref="rightGallery">
@@ -30,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import BScroll from '@better-scroll/core'
 import { ElProgress } from 'element-plus'
 import { ArrowRightBold } from '@element-plus/icons-vue'
@@ -107,8 +112,9 @@ const galleryRightItems = ref([
 const leftGallery = ref(null)
 const rightGallery = ref(null)
 
-const showProgressBar = ref(false)
-const progress = ref(0)
+const leftProgress = ref(100)
+const RightProgress = ref(0)
+
 const leftImage = ref(null)
 const rightImage = ref(null)
 
@@ -141,13 +147,14 @@ onMounted(() => {
   })
 })
 
-watch(progress, (newProgress) => {
-  if (newProgress >= 100) {
-    setTimeout(() => {
-      showProgressBar.value = false
-    }, 500)
-  }
-})
+
+const formatLeftProgress = (percentage) => {
+  return percentage === 100 ? '分割完毕' : `${percentage}%`
+}
+
+const formatRightProgress = (percentage) => {
+  return percentage === 100 ? '规范化完毕' : `${percentage}%`
+}
 
 const showImage = (gallery, src) => {
   console.log('Show image:', gallery, src);
@@ -166,6 +173,7 @@ const showImage = (gallery, src) => {
 <style scoped>
 .main-content {
   display: flex;
+  flex-direction: row;
   width: 100%;
   height: 100%;
   position: relative;
@@ -222,9 +230,39 @@ const showImage = (gallery, src) => {
   object-fit: cover; /* 保持图片的长宽比，缩放图片以适应容器 */
 }
 
+.middle {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress-left {
+  display: flex;
+  width: 100%;
+  height: 25%;
+}
+
+.progress-right {
+  display: flex;
+  width: 100%;
+  height: 25%;
+  justify-content: flex-end; /* 第二个进度条靠右 */
+}
+
+.demo-progress .el-progress--line {
+  margin-bottom: 15px;
+  max-width: 600px;
+}
+
 .main-area {
   flex: 1;
   display: flex;
+  width: 100%;
+  height: 50%;
+  flex-direction: row; /* 水平排列 */
   justify-content: space-between;
   align-items: center;
   padding: 20px;

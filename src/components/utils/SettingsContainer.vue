@@ -17,6 +17,9 @@
                 <UploadFilled />
               </el-icon>
             </template>
+            <template #append>
+                <el-button type="primary"  @click="triggerUpload" >上传</el-button>
+            </template>
           </el-input>
           <span v-if="errors.uploadUrl" class="error-message">{{ errors.uploadUrl }}</span>
         </el-form-item>
@@ -42,9 +45,11 @@
         <!-- <el-form-item>
           <el-button type="primary" @click="$emit('toggle-advanced-settings')">高级设置</el-button>
         </el-form-item> -->
-        <el-form-item class="custom-input">
-              <el-button class="button-container" type="info" round style="width: 200%;" @click="validateAndStartGeneration">生    成</el-button>
-          <!-- <el-button type="danger" @click="stopGeneration" :disabled="!isGenerating">停止</el-button> -->
+        <el-form-item class="buttons">
+            <el-button class="button-container" type="info" round style="width: 200%;" @click="validateAndStartGeneration">生    成</el-button>
+        </el-form-item>
+        <el-form-item class="buttons">
+            <el-button class="button-container" type="info" round style="width: 200%;" @click="downloadFile">下    载</el-button>
         </el-form-item>
       </el-form>
     </el-main>
@@ -57,7 +62,19 @@
         <transition name="slide-fade">
         <div v-show="showAdvancedSettings" class="advanced-settings-content">
           <!-- 高级设置内容 -->
-          <p>这里是高级设置的内容</p>
+          <el-form-item label="随机种子">
+              <el-input v-model="form.seed" type="number" placeholder="请输入..."></el-input>
+            </el-form-item>
+            <el-form-item label="步长">
+              <el-slider v-model="form.step" :min="1" :max="20" show-stops></el-slider>
+            </el-form-item>
+            <el-form-item label="扩散策略">
+              <el-select v-model="form.diffusionStrategy" placeholder="请选择扩散策略">
+                <el-option label="策略 1" value="1"></el-option>
+                <el-option label="策略 2" value="2"></el-option>
+                <el-option label="策略 3" value="3"></el-option>
+              </el-select>
+            </el-form-item>
         </div>
       </transition>
     </el-row>
@@ -80,6 +97,8 @@
 <script setup>
 import { ref } from 'vue'
 import { Setting, Plus, UploadFilled } from '@element-plus/icons-vue'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 
 const form = ref({
@@ -169,6 +188,31 @@ const handleClick = (refName) => {
   }
 }
 
+const downloadFile = async () => {
+  try {
+    const response = await axios.get('http://localhost:8888/download', {
+      responseType: 'blob' // 确保响应类型为 blob
+    })
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'filename.ext') // 设置下载文件的名称和扩展名
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    ElMessage({
+      message: '下载成功',
+      type: 'success',
+    })
+  } catch (error) {
+    console.error(error)
+    ElMessage({
+      message: '下载失败，请稍后再试',
+      type: 'error',
+    })
+  }
+}
+
 const uploadInput = ref(null)
 const storageInput = ref(null)
 const showAdvancedSettings = ref(false)
@@ -217,6 +261,14 @@ const showAdvancedSettings1 = ref(false)
   width: 100%;
   height: 75px;
   border-radius: 16px !important; 
+  display: flex;
+  flex-direction: column; /* 设置主轴为垂直方向 */
+}
+
+.buttons {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  width: 100%;
 }
 
 .settings-main {
@@ -242,7 +294,6 @@ const showAdvancedSettings1 = ref(false)
   }
 }
 
-
 .settings-advance {
     width: 80%;
     height: 40%;
@@ -263,11 +314,11 @@ const showAdvancedSettings1 = ref(false)
     cursor: pointer;
     font-size: 120%;
     transition: height 0.5s ease; /* 添加高度过渡效果 */
-    /* position: relative; */
+    position: relative; /* 确保子元素可以使用绝对定位 */
 }
 
 .option1.slide {
-    height: 80%;
+    height: 60%;
 }
 
 .invisible-button {
@@ -301,6 +352,16 @@ const showAdvancedSettings1 = ref(false)
   justify-content: space-between; /* 水平分布 */
   width: calc(100% - 20px); /* 根据需要调整 */
   letter-spacing: 0.1em; /* 设置字母间距 */
+}
+
+.advanced-settings-content {
+  left: 10px; /* 根据需要调整 */
+  margin-top: 20px;
+  width: 80%;
+  font-size: 12px; /* 设置字体大小 */
+  color: #333; /* 设置字体颜色 */
+  align-items: center; 
+  font-family: 'Arial', sans-serif; /* 设置字体样式 */
 }
 
 .slide-fade-enter-active, .slide-fade-leave-active {
