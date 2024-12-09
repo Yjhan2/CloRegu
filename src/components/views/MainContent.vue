@@ -112,7 +112,7 @@ const galleryRightItems = ref([
 const leftGallery = ref(null)
 const rightGallery = ref(null)
 
-const leftProgress = ref(100)
+const leftProgress = ref(0)
 const RightProgress = ref(0)
 
 const leftImage = ref(null)
