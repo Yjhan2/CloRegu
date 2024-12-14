@@ -165,10 +165,7 @@ const showImage = (gallery, src) => {
   }
 }
 
-// defineExpose({
-//   startProgress
-// })
-// </script>
+</script>
 
 <style scoped>
 .main-content {
@@ -176,7 +173,6 @@ const showImage = (gallery, src) => {
   flex-direction: row;
   width: 100%;
   height: 100%;
-  position: relative;
 }
 
 .progress-bar {
@@ -190,7 +186,7 @@ const showImage = (gallery, src) => {
 
 .gallery {
   width: 10%;
-  height: 800px; /* 固定画廊的高度 */
+  height: 100vh; /* 固定画廊的高度 */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -263,16 +259,16 @@ const showImage = (gallery, src) => {
   width: 100%;
   height: 50%;
   flex-direction: row; /* 水平排列 */
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 20px;
+  gap: 3%; /* 设置子元素之间的间隔 */
 }
 
 .display-box {
-  width: 50%;
-  padding-top: 65%;
+  width: 40%;
+  padding-top: 55%;
   background-color: #f0f0f0;
-  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -293,16 +289,16 @@ const showImage = (gallery, src) => {
 }
 
 .arrow {
-  width: 30px; /* 调整箭头图片的宽度 */
+  width: 10%; /* 调整箭头图片的宽度 */
   height: auto; /* 保持箭头图片的高度自适应 */
   margin: 0 10px;
 }
 
 .left-display-box {
-  margin-right: 10px;
+  /*margin-right: 10%;*/
 }
 
 .right-display-box {
-  margin-left: 10px;
+  /*margin-left: 10%;*/
 }
 </style>

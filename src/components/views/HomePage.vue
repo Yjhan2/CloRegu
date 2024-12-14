@@ -71,7 +71,6 @@ const toggleAdvancedSettings = () => {
   <div class="home-page">
     <h1 class="title">
       服装规范化平台
-      <!-- <el-button class="logout-button" type="primary" @click="logout">登出</el-button> -->
       <div class="user-avatar" :class="{ enlarged: showUserMenu }" @click="toggleUserMenu">
       <img :src="userAvatar" alt="User Avatar"/>
     </div>
@@ -115,7 +114,7 @@ html, body {
 .home-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 10rem;
   background-color: #f5f5f5;
   margin: 0; /* 确保没有外边距 */
   padding: 0; /* 确保没有内边距 */
@@ -123,12 +122,11 @@ html, body {
 
 .title {
   color: #0a0a0a;
-  padding: 20px;
+  padding: 2rem;
   background-color: rgb(246, 248, 250);
   width: 100%;
   text-align: left;
   margin: 0; /* 确保没有外边距 */
-  border-bottom: 1px solid #e0e0e0; /* 添加底部边框代替阴影 */
   box-sizing: border-box; /* 确保内边距和边框包含在元素的总宽度和高度内 */
   position: fixed; /* 固定位置 */
   top: 0; /* 距离顶部0 */
@@ -138,12 +136,12 @@ html, body {
 
 .user-avatar {
   position: absolute;
-  top: 10px;
-  right: 30px;
-  width: 60px; /* 设置圆形框的宽度 */
-  height: 60px; /* 设置圆形框的高度 */
+  top: 0.5rem;
+  right: 3rem;
+  width: 5rem; /* 设置圆形框的宽度 */
+  height: 5rem; /* 设置圆形框的高度 */
   border-radius: 50%; /* 设置为圆形 */
-  border: 1px solid #0c0c0c; /* 设置边框颜色 */
+  border: 0.1rem solid #0c0c0c; /* 设置边框颜色 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -151,22 +149,21 @@ html, body {
 }
 
 .user-avatar.enlarged {
-  width: 70px; /* 放大后的宽度 */
-  height: 70px; /* 放大后的高度 */
+  width: 6rem; /* 放大后的宽度 */
+  height: 6rem; /* 放大后的高度 */
 }
 
 
 .user-menu {
   position: absolute;
-  top: 80px; /* 根据需要调整 */
-  right: 30px; /* 根据需要调整 */
-  width: 150px;
+  top: 8rem; /* 根据需要调整 */
+  right: 3rem; /* 根据需要调整 */
+  width: 15rem;
   background-color: white;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.1);
+  padding: 1rem;
   z-index: 1001; /* 确保在最上层 */
-  border-radius: 10px; /* 添加圆角 */
+  border-radius: 1rem; /* 添加圆角 */
   transition: all 0.3s ease; /* 添加过渡动画 */
 }
 
@@ -174,17 +171,6 @@ html, body {
   width: 100%; /* 确保图片填满圆形框 */
   height: 100%; /* 确保图片填满圆形框 */
   border-radius: 50%; /* 确保图片本身也是圆形 */
-}
-
-.logout-button {
-  position: absolute;
-  top: 30%;
-  right: 10px;
-  border: none;
-  background: none;
-  color: #42b983;
-  font-size: 16px;
-  cursor: pointer;
 }
 
 .content {
@@ -196,7 +182,7 @@ html, body {
 .left-panel {
   width: 20%;
   background-color: #f0f0f0;
-  padding: 10px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   overflow: auto; /* 确保内容不会外溢 */
@@ -205,7 +191,7 @@ html, body {
 .right-panel {
   flex: 1;
   background-color: #ffffff;
-  padding: 10px;
+  padding: 1rem;
   overflow: auto; /* 确保内容在面板内部滚动 */
 }
 </style>

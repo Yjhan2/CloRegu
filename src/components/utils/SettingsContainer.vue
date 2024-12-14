@@ -18,16 +18,11 @@
               </el-icon>
             </template>
             <template #append>
-                <el-button type="primary"  @click="triggerUpload" >上传</el-button>
+                <el-button type="primary"  @click="triggerUpload('uploadInput')" >上传</el-button>
             </template>
           </el-input>
           <span v-if="errors.uploadUrl" class="error-message">{{ errors.uploadUrl }}</span>
         </el-form-item>
-        <!-- <el-form-item label="存储地址" :error="errors.storagePath">
-          <input type="file" webkitdirectory @change="handleStorageSuccess" style="display: none;" ref="storageInput" />
-          <el-input v-model="form.storagePath" readonly @click="handleClick('storageInput')" class="custom-input"></el-input>
-          <span v-if="errors.storagePath" class="error-message">{{ errors.storagePath }}</span>
-        </el-form-item> -->
         <el-form-item :error="errors.clothingType" class="custom-input">
           <el-row :span="28" justify="start">
              服装选择
@@ -37,14 +32,11 @@
               v-for="item in clothingOptions"
               :key="item.value"
               :label="item.label"
-              :value="item.value"
+                           :value="item.value"
             ></el-option>
           </el-select>
           <span v-if="errors.clothingType" class="error-message">{{ errors.clothingType }}</span>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="primary" @click="$emit('toggle-advanced-settings')">高级设置</el-button>
-        </el-form-item> -->
         <el-form-item class="buttons">
             <el-button class="button-container" type="info" round style="width: 200%;" @click="validateAndStartGeneration">生    成</el-button>
         </el-form-item>
@@ -54,7 +46,6 @@
       </el-form>
     </el-main>
     <el-footer class="settings-advance">
-      
       <el-row class="option1" :class="{ 'slide': showAdvancedSettings }">
       <el-row class="advanced-settings-text"><span>高级设置</span> <el-icon class="plus-icon" :class="{ 'rotate': showAdvancedSettings }"><Plus /></el-icon>
       <button class="invisible-button" @click="showAdvancedSettings=!showAdvancedSettings"></button>
@@ -65,15 +56,15 @@
           <el-form-item label="随机种子">
               <el-input v-model="form.seed" type="number" placeholder="请输入..."></el-input>
             </el-form-item>
-            <el-form-item label="步长">
-              <el-slider v-model="form.step" :min="1" :max="20" show-stops></el-slider>
-            </el-form-item>
             <el-form-item label="扩散策略">
               <el-select v-model="form.diffusionStrategy" placeholder="请选择扩散策略">
-                <el-option label="策略 1" value="1"></el-option>
-                <el-option label="策略 2" value="2"></el-option>
-                <el-option label="策略 3" value="3"></el-option>
+                <el-option label="速度优先" value="1"></el-option>
+                <el-option label="质量优先" value="2"></el-option>
+                <el-option label="均衡" value="3"></el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="扩散步长">
+              <el-slider v-model="form.step" :min="1" :max="20" show-stops></el-slider>
             </el-form-item>
         </div>
       </transition>
@@ -162,27 +153,43 @@ const startGeneration = () => {
   mainContent.dispatchEvent(new CustomEvent('start-progress'))
 }
 
-// const stopGeneration = () => {
-//   isGenerating.value = false
-//   // 在这里添加停止逻辑
-// }
+let files = ref(null)
 
 const handleUploadSuccess = (event) => {
-  const files = event.target.files
-  if (files.length > 0) {
-    form.value.uploadUrl = files[0].webkitRelativePath.split('/')[0]
+  files.value = event.target.files
+  console.log(files.value[0].webkitAbsolutePath)
+  if (files.value.length > 0) {
+    form.value.uploadUrl = files.value[0].webkitRelativePath.split('/')[0]
   }
 }
 
-// const handleStorageSuccess = (event) => {
-//   const files = event.target.files
-//   if (files.length > 0) {
-//     form.value.storagePath = files[0].webkitRelativePath.split('/')[0]
-//   }
-// }
+const triggerUpload = async() => {
+  const formData = new FormData();
+    for (let i = 0; i < files.value.length; i++) {
+      formData.append('files', files[i]);
+    }
+
+    // 上传文件到服务器
+    try {
+      await axios.post('http://localhost:8888/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      ElMessage({
+        message: '上传成功',
+        type: 'success'
+      });
+    } catch (error) {
+      ElMessage({
+        message: '上传失败',
+        type: 'error'
+      });
+    }
+  }
 
 const handleClick = (refName) => {
-  const inputRef = refName === 'uploadInput' ? uploadInput.value : storageInput.value
+  const inputRef = refName === 'uploadInput' ? uploadInput.value : null
   if (inputRef) {
     inputRef.click()
   }
@@ -214,7 +221,6 @@ const downloadFile = async () => {
 }
 
 const uploadInput = ref(null)
-const storageInput = ref(null)
 const showAdvancedSettings = ref(false)
 const showAdvancedSettings1 = ref(false)
 </script>
@@ -229,8 +235,6 @@ const showAdvancedSettings1 = ref(false)
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border-right: 1px solid #e0e0e0; /* 添加右侧边框代替阴影 */
-    margin-top: 0; /* 确保没有间隔 */
     font-family: 'PingFangSC-Semibold';
 }
 
@@ -269,12 +273,13 @@ const showAdvancedSettings1 = ref(false)
   display: flex;
   justify-content: center; /* 水平居中 */
   width: 100%;
+  height: 4vh !important;
 }
 
 .settings-main {
     text-align: center;
     width: 80%;
-    flex: 1;
+    justify-content: space-between; /*均匀分布*/
     position: relative; /* 确保子元素可以使用绝对定位 */
 }
 
@@ -307,18 +312,18 @@ const showAdvancedSettings1 = ref(false)
 .option1 {
     top: 0; /* 距离顶部0 */
     width: 100%;
-    height: 15%;
+    height: 3rem;
     align-items: center;
     border-top: 1px solid #0c0c0c; /* 添加顶部边框 */
     border-bottom: 1px solid #0c0c0c; /* 添加底部边框 */
     cursor: pointer;
     font-size: 120%;
     transition: height 0.5s ease; /* 添加高度过渡效果 */
-    position: relative; /* 确保子元素可以使用绝对定位 */
+    justify-content: center;
 }
 
 .option1.slide {
-    height: 60%;
+    height: 14rem;
 }
 
 .invisible-button {
@@ -345,22 +350,22 @@ const showAdvancedSettings1 = ref(false)
 
 .advanced-settings-text {
   position: absolute; 
-  left: 10px; /* 根据需要调整 */
-  top: 8px; /* 根据需要调整 */
+  left: 5%; /* 根据需要调整 */
+  top: 0.5rem; /* 根据需要调整 */
   display: flex;
   align-items: center; /* 垂直居中 */
-  justify-content: space-between; /* 水平分布 */
+  justify-content: space-between; /* 平均分布 */
   width: calc(100% - 20px); /* 根据需要调整 */
   letter-spacing: 0.1em; /* 设置字母间距 */
 }
 
 .advanced-settings-content {
-  left: 10px; /* 根据需要调整 */
-  margin-top: 20px;
-  width: 80%;
+  left: 10%; /* 根据需要调整 */
+  margin-top: 3rem;
+  width: 90%;
   font-size: 12px; /* 设置字体大小 */
   color: #333; /* 设置字体颜色 */
-  align-items: center; 
+  justify-content: apace-between; /* 均匀分布 */
   font-family: 'Arial', sans-serif; /* 设置字体样式 */
 }
 
